@@ -74,3 +74,8 @@ def trraffic():
         traffic_dict["Month"] = Month, 
         traffic_dict["Day"] =  Day, 
         traffic_dict["Year"] = Year 
+        traffic_info.append(traffic_dict)
+    return jsonify(traffic_info)
+
+if __name__ == "__main__":
+    app.run(debug=True)
