@@ -77,5 +77,9 @@ def trraffic():
         traffic_info.append(traffic_dict)
     return jsonify(traffic_info)
 
+@app.route("/home")
+def landingPage():
+    return render_template('index.html')
+
 if __name__ == "__main__":
     app.run(debug=True)
