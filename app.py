@@ -19,6 +19,8 @@ Base.prepare(engine, reflect = True)
 
 trraffic_ = Base.classes.trraffic
 
+tpten_ = Base.classes.tpten
+
 app = Flask(__name__)
 
 @app.route("/")
@@ -76,6 +78,24 @@ def trraffic():
         traffic_dict["Year"] = Year 
         traffic_info.append(traffic_dict)
     return jsonify(traffic_info)
+@app.route("/api/v1.0/tpten")
+def tpten():
+    session = Session(engine)
+
+    results = session.query(tpten_.ID, tpten_.Segment_ID, tpten_.yearly_total, tpten_.latitude, tpten_.longitude)
+
+    session.close()
+
+    tpten_info = []
+    for ID, Segment_ID, yearly_total, latitude, longitude in results:
+        tpten_dict = {}
+        tpten_dict["ID"] = ID, 
+        tpten_dict["Segment_ID"] = Segment_ID, 
+        tpten_dict["yearly_total"] = yearly_total, 
+        tpten_dict["latitude"] = latitude, 
+        tpten_dict["longitude"] = longitude
+        tpten_info.append(tpten_dict)
+    return jsonify(tpten_info)
 
 @app.route("/home")
 def landingPage():
