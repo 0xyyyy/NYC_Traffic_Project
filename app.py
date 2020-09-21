@@ -97,6 +97,47 @@ def tpten():
         tpten_info.append(tpten_dict)
     return jsonify(tpten_info)
 
+#returns list of segment_ID's 
+@app.route("/Segment_ID")
+def segment_IDs():
+    sel = [tpten_.Segment_ID]
+    
+    session = Session(engine)
+
+    segments = [segment[0] for segment in session.query(*sel).all()]
+
+    session.close()
+
+    return jsonify(segments)
+
+
+#returns segment_ID metadata 
+@app.route("/metadata/<Segment_ID>")
+def segment_metadata(Segment_ID):
+    """Return the Metadata for given segment_ID"""
+    sel = [
+        tpten_.ID,
+        tpten_.Segment_ID,
+        tpten_.yearly_total,
+        tpten_.latitude,
+        tpten_.longitude
+    ]
+
+    col_names = tpten_.__table__.columns.keys()
+    session = Session(engine)
+
+    results = session.query(*sel).filter(tpten_.Segment_ID == Segment_ID).all()
+
+    session.close()
+
+    segment_metadata = {}
+    for result in results:
+        segment_metadata["Segment_ID"] = result[1]
+        segment_metadata["yearly_total"] = result[2]
+        segment_metadata["latitude"] = result[3]
+        segment_metadata["longitude"] = result[4]
+    return jsonify(segment_metadata)
+    
 @app.route("/home")
 def landingPage():
     return render_template('index.html')
